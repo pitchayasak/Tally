@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useApp } from '../context/AppContext'
 import { monthKey, isTaskDone } from '../core/helpers'
 import { MonthNav } from '../components/nav/MonthNav'
@@ -11,8 +12,12 @@ interface Props {
 }
 
 export function MonthlyPage({ date, onDateChange }: Props) {
-  const { tasks, log, showProgressBar, updateEntry } = useApp()
+  const { tasks, log, showProgressBar, updateEntry, loadLogRangeIntoCache } = useApp()
   const mk = monthKey(date)
+
+  useEffect(() => {
+    loadLogRangeIntoCache(mk, mk)
+  }, [mk, loadLogRangeIntoCache])
   const monthLog = log[mk]
   const monthlyTasks = tasks.filter(t => t.frequency === 'monthly')
   const doneTasks = monthlyTasks.filter(t => isTaskDone(t, monthLog?.[t.id]))

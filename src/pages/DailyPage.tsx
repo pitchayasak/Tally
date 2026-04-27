@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useApp } from '../context/AppContext'
 import { dateKey, isTaskDone } from '../core/helpers'
 import { DateNav } from '../components/nav/DateNav'
@@ -11,8 +12,12 @@ interface Props {
 }
 
 export function DailyPage({ date, onDateChange }: Props) {
-  const { tasks, log, showProgressBar, updateEntry } = useApp()
+  const { tasks, log, showProgressBar, updateEntry, loadLogRangeIntoCache } = useApp()
   const dk = dateKey(date)
+
+  useEffect(() => {
+    loadLogRangeIntoCache(dk, dk)
+  }, [dk, loadLogRangeIntoCache])
   const dayLog = log[dk]
   const dailyTasks = tasks.filter(t => t.frequency === 'daily')
   const doneTasks = dailyTasks.filter(t => isTaskDone(t, dayLog?.[t.id]))
