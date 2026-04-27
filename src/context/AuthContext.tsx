@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { onAuthStateChanged, getRedirectResult, type User } from 'firebase/auth'
+import { onAuthStateChanged, type User } from 'firebase/auth'
 import { auth } from '../firebase/config'
 
 interface AuthCtx {
@@ -14,9 +14,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Handle redirect result from mobile sign-in
-    getRedirectResult(auth).catch(() => {})
-
     const unsub = onAuthStateChanged(auth, u => {
       setUser(u)
       setLoading(false)
