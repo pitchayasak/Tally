@@ -48,9 +48,8 @@ export function TaskEditorSheet({ task, uid, onSave, onDelete, onClose }: Props)
       color,
       created: task?.created ?? Date.now(),
       frequency: freq,
-      mode: type === 'exercise' ? mode : undefined,
-      icon: type === 'exercise' ? icon : undefined,
       order: task?.order ?? Date.now(),
+      ...(type === 'exercise' ? { mode, icon } : {}),
     }
     onSave(saved, isNew)
     onClose()
